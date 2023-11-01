@@ -2,9 +2,20 @@
 
 ## Pré-requisitos
 
-1. [Python3](https://www.python.org/downloads/)
-2. [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+1. [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+2. [Python3](https://www.python.org/downloads/)
+
+Verifique a instalação:
+```bash
+python3 --version
+pip3 --version
+```
 3. [gimme-aws-creds](https://github.com/Nike-Inc/gimme-aws-creds)
+
+Instalando como módulo python:
+```bash
+pip3 install --upgrade gimme-aws-creds
+```
 4. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
 
 ### Conectando-se ao cluster
