@@ -3,6 +3,12 @@
 ## Pré-requisitos
 
 1. [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+
+Verifique a instalação:
+```bash
+aws --version
+```
+
 2. [Python3](https://www.python.org/downloads/)
 
 Verifique a instalação:
@@ -10,52 +16,71 @@ Verifique a instalação:
 python3 --version
 pip3 --version
 ```
-3. [gimme-aws-creds](https://github.com/Nike-Inc/gimme-aws-creds)
+
+3. gimme-aws-creds
 
 Instalando como módulo python:
 ```bash
 pip3 install --upgrade gimme-aws-creds
 ```
+Verifique a instalação:
+```bash
+gimme-aws-creds --version
+```
+
 4. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
 
-### Conectando-se ao cluster
+Verifique a instalação:
+```bash
+kubectl version
+```
+
+## Conectando-se ao cluster
 
 1. Siga esse [tutorial](https://github.com/nufuturo-ufcg/stress-testing-automation/blob/main/doc/aws-credentials.md) para atualizar suas credenciais da AWS;
+
 2. Execute o comando abaixo para configurar o kubectl:
+
 ```bash
 aws eks update-kubeconfig --name minicurso-kubernetes --region sa-east-1 --profile nufuturo
 ```
-3. Execute o comando abaixo para alterando `<meu-namespace>` pelo prefixo do seu email ccc, com hífen no lugar do ponto. Ex: carlos-ribeiro.:
+
+3. Agora vamos alterar o namespace default para o que você irá utilizar. Execute o comando abaixo alterando `<meu-namespace>` pelo prefixo do seu email ccc, com hífen no lugar do ponto. Ex: carlos-ribeiro.:
+
 ```bash
 kubectl config set-context --current --namespace=<meu_namespace>
 ```
 
+4. Verifique que você está conectado ao cluster:
+```bash 
+kubectl get pods
+```
+
 ## Mãos a obra
 
-### Capítulo 1 - Deploy
+### Capítulo 1 - Deployment
 
-#### Introdução
+Depois de obter acesso a um cluster Kubernetes em funcionamento, você pode implantar suas aplicações nele. Para fazer isso, você cria um **Deployment** no Kubernetes. O **Deployment** instrui o Kubernetes sobre como criar e atualizar instâncias da sua aplicação. Uma vez que você tenha criado um **Deployment**, o _control plane_ do Kubernetes escalona as instâncias da aplicação incluídas nesse **Deployment** para serem executadas em _nodes_ individuais no cluster.
 
-Once you have a running Kubernetes cluster, you can deploy your containerized applications on top of it. To do so, you create a Kubernetes Deployment. The Deployment instructs Kubernetes how to create and update instances of your application. Once you've created a Deployment, the Kubernetes control plane schedules the application instances included in that Deployment to run on individual Nodes in the cluster.
+Você pode criar e gerenciar um **Deployment** usando a interface de linha de comando do Kubernetes, o **kubectl**.
 
-You can create and manage a Deployment by using the Kubernetes command line interface, kubectl.
+> 💡 Dica
+> 
+> O formato comum de um comando do kubectl é: `kubectl action resource`
 
-When you create a Deployment, you'll need to specify the container image for your application and the number of replicas that you want to run.
+Quando você cria uma **Deployment**, precisará especificar a imagem do contêiner para a sua aplicação e o número de réplicas que deseja executar.
 
-The common format of a kubectl command is: kubectl action resource (?)
-
-Let’s deploy our first app on Kubernetes with the kubectl create deployment command. We need to provide the deployment name and app image location
-
+Vamos implantar nossa primeira aplicação no Kubernetes com o comando `kubectl create deployment`. Precisamos fornecer o nome do **Deployment** e a localização da imagem da aplicação:
 ```bash
 kubectl create deployment kubernetes-bootcamp --image=gcr.io/google-samples/kubernetes-bootcamp:v1
 ```
 
-To list your deployments use the kubectl get deployments command:
+Para listar seus deployments utilize o comando a seguir:
 ```bash
 kubectl get deployments
 ```
 
-We see that there is 1 deployment running a single instance of your app. The instance is running inside a container on your node.
+Podemos ver que há 1 deployment executando uma única instância da sua aplicação. A aplicação está executando dentro de um contâiner no seu _Node_.
 
 ### Capítulo 2 - Visualização (?)
 
