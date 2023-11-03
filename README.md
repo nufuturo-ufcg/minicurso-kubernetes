@@ -35,7 +35,21 @@ Verifique a instalação:
 kubectl version
 ```
 
-## Conectando-se ao cluster
+## Conectando-se ao cluster (Maria Luísa)
+
+1. Faça ssh para o control plane do cluster:
+
+```bash
+ssh ubuntu@54.207.145.223
+```
+
+2. Verifique que você está conectada ao cluster:
+
+```bash 
+kubectl get pods
+```
+
+## Conectando-se ao cluster (Resto)
 
 1. Siga esse [tutorial](https://github.com/nufuturo-ufcg/stress-testing-automation/blob/main/doc/aws-credentials.md) para atualizar suas credenciais da AWS;
 
@@ -51,7 +65,7 @@ aws eks update-kubeconfig --name minicurso-kubernetes --region sa-east-1 --profi
 kubectl config set-context --current --namespace=<meu_namespace>
 ```
 
-4. Verifique que você está conectado ao cluster:
+4. Verifique que você está conectado(a) ao cluster:
 ```bash 
 kubectl get pods
 ```
@@ -60,7 +74,7 @@ kubectl get pods
 
 ### Capítulo 1 - Deployment
 
-Depois de obter acesso a um cluster Kubernetes em funcionamento, você pode implantar suas aplicações nele. Para fazer isso, você cria um **Deployment** no Kubernetes. O **Deployment** instrui o Kubernetes sobre como criar e atualizar instâncias da sua aplicação. Uma vez que você tenha criado um **Deployment**, o _control plane_ do Kubernetes escalona as instâncias da aplicação incluídas nesse **Deployment** para serem executadas em _nodes_ individuais no cluster.
+Depois de obter acesso a um cluster Kubernetes em funcionamento, você pode implantar suas aplicações nele. Para fazer isso, você irá criar um **Deployment** no Kubernetes. O **Deployment** instrui o Kubernetes sobre como criar e atualizar instâncias da sua aplicação. Uma vez que você tenha criado um **Deployment**, o _control plane_ do Kubernetes escalona as instâncias da aplicação incluídas nesse **Deployment** para serem executadas em _nodes_ individuais no cluster.
 
 Você pode criar e gerenciar um **Deployment** usando a interface de linha de comando do Kubernetes, o **kubectl**.
 
@@ -68,7 +82,7 @@ Você pode criar e gerenciar um **Deployment** usando a interface de linha de co
 > 
 > O formato comum de um comando do kubectl é: `kubectl action resource`
 
-Quando você cria uma **Deployment**, precisará especificar a imagem do contêiner para a sua aplicação e o número de réplicas que deseja executar.
+Quando você cria uma **Deployment**, precisará especificar a imagem contâinerizada da sua aplicação e o número de réplicas que deseja executar.
 
 Vamos implantar nossa primeira aplicação no Kubernetes com o comando `kubectl create deployment`. Precisamos fornecer o nome do **Deployment** e a localização da imagem da aplicação:
 ```bash
@@ -81,6 +95,14 @@ kubectl get deployments
 ```
 
 Podemos ver que há 1 deployment executando uma única instância da sua aplicação. A aplicação está executando dentro de um contâiner no seu _Node_.
+
+#### Exercícios
+
+No exemplo acima, criamos um **Deployment** a partir da imagem `gcr.io/google-samples/kubernetes-bootcamp:v1`. Experimente criar outros deployments utilizando outras imagens e variando o número de réplicas.
+
+> 💡 Dica
+> 
+> Você pode obter ajuda utilizando o comando `kubectl create deployment --help`
 
 ### Capítulo 2 - Visualização (?)
 
