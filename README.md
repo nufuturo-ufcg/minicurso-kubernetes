@@ -96,6 +96,10 @@ kubectl get deployments
 
 Podemos ver que há 1 deployment executando uma única instância da sua aplicação. A aplicação está executando dentro de um contâiner no seu _Node_.
 
+> 👀 Fique sabendo
+> 
+> Em ambiente de produção, tanto o Deployment quanto os outros componentes do cluster kubernetes são configurados diretamente nos arquivos .yaml. É realizado o comando `kubectl apply -f <component.yaml>` para criar/aplicar o componente de acordo com a especificação no .yaml
+
 #### Exercícios
 
 No exemplo acima, criamos um **Deployment** a partir da imagem `gcr.io/google-samples/kubernetes-bootcamp:v1`. Experimente criar outros deployments utilizando outras imagens e variando o número de réplicas.
@@ -180,18 +184,6 @@ kubectl exec -ti <pod-name> -- bash
 
 Agora estamos dentro do container que está rodando a nossa aplicação, para verificar, é possível fazer um curl no localhost na porta 8080, que está rodando a aplicação:
 If no pods are running, please wait a couple of seconds and list the Pods again. You can continue once you see one Pod running.
-
-Next, to view what containers are inside that Pod and what images are used to build those containers we run the kubectl describe pods command:
-
-```bash
-kubectl describe pods
-```
-
-We see here details about the Pod’s container: IP address, the ports used and a list of events related to the lifecycle of the Pod.
-
-The output of the describe subcommand is extensive and covers some concepts that we didn’t explain yet, but don’t worry, they will become familiar by the end of this bootcamp.
-
-Note: the describe subcommand can be used to get detailed information about most of the Kubernetes primitives, including Nodes, Pods, and Deployments. The describe output is designed to be human readable, not to be scripted against.
 
 ##### View the container logs
 
