@@ -139,20 +139,18 @@ ip-172-31-9-99    Ready    <none>          8d    v1.28.2
 
 #### Troubleshooting com kubectl
 
-In Chapter 1, you used the kubectl command-line interface. You'll continue to use it in Chapter 2 to get information about deployed applications and their environments. The most common operations can be done with the following kubectl subcommands:
+No Capítulo 1, você utilizou a inteface de linha de comando do kubectl. Você continuará usando-a no Capítulo 2 para visualizar informações sobre aplicações implantadas e seus ambientes. As operações mais comuns podem ser feitas com os seguintes subcomandos:
 
-- `kubectl get` - list resources
-- `kubectl describe` - show detailed information about a resource
-- `kubectl logs` - print the logs from a container in a pod
-- `kubectl exec` - execute a command on a container in a pod
+- `kubectl get` - listar recursos
+- `kubectl describe` - exibir informações detalhadas sobre um recurso
+- `kubectl logs` - imprime os logs de um container em um pod
+- `kubectl exec` - executa um comando em um container em um pod
 
-You can use these commands to see when applications were deployed, what their current statuses are, where they are running and what their configurations are.
+Você pode usar esses comandos para ver quando aplicações foram implantadas, qual o status delas, onde elas estão executando e quais as suas configurações.
 
-Now that we know more about our cluster components and the command line, let's explore our application.
+Agora que sabemos mais sobre os componentes do nosso cluster e a linha de comando, vamos explorar nossa aplicação.
 
-A node is a worker machine in Kubernetes and may be a VM or physical machine, depending on the cluster. Multiple Pods can run on one Node.
-
-##### Check application configuration
+##### Checando a configuração da aplicação
 
 Após realizar o deploy da nossa aplicação, podemos utilizar uma série de comandos voltados para a visualização dos elementos de nosso cluster. Para verificar o que foi criado para a nossa aplicação, vamos utilizar o seguinte comando para ver os _Pods_ existentes:
 
@@ -183,48 +181,10 @@ kubectl exec -ti <pod-name> -- bash
 ```
 
 Agora estamos dentro do container que está rodando a nossa aplicação, para verificar, é possível fazer um curl no localhost na porta 8080, que está rodando a aplicação:
-If no pods are running, please wait a couple of seconds and list the Pods again. You can continue once you see one Pod running.
-
-##### View the container logs
-
-Anything that the application would normally send to standard output becomes logs for the container within the Pod. We can retrieve these logs using the kubectl logs command:
-
-```bash
-kubectl logs "$POD_NAME"
-```
-
-Note: We don't need to specify the container name, because we only have one container inside the pod.
-Executing command on the container
-
-We can execute commands directly on the container once the Pod is up and running. For this, we use the exec subcommand and use the name of the Pod as a parameter. Let’s list the environment variables:
-
-```bash
-kubectl exec "$POD_NAME" -- env
-```
-
-Again, it's worth mentioning that the name of the container itself can be omitted since we only have a single container in the Pod.
-
-Next let’s start a bash session in the Pod’s container:
-
-```bash
-kubectl exec -ti $POD_NAME -- bash
-```
-
-We have now an open console on the container where we run our NodeJS application. The source code of the app is in the server.js file:
-
-```bash
-cat server.js
-```
-
-You can check that the application is up by running a curl command:
 
 ```bash
 curl http://localhost:8080
 ```
-
-Note: here we used localhost because we executed the command inside the NodeJS Pod. If you cannot connect to localhost:8080, check to make sure you have run the kubectl exec command and are launching the command from within the Pod
-
-To close your container connection, type exit.
 
 ### Capítulo 3 - Expondo a aplicação
 
