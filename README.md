@@ -62,7 +62,7 @@ aws eks update-kubeconfig --name minicurso-kubernetes --region sa-east-1 --profi
 3. Agora vamos alterar o namespace default para o que você irá utilizar. Execute o comando abaixo alterando `<meu-namespace>` pelo prefixo do seu email ccc, com hífen no lugar do ponto. Ex: carlos-ribeiro.:
 
 ```bash
-kubectl config set-context --current --namespace=<meu_namespace>
+kubectl config set-context --current --namespace=<meu-namespace>
 ```
 
 4. Verifique que você está conectado(a) ao cluster:
@@ -70,11 +70,58 @@ kubectl config set-context --current --namespace=<meu_namespace>
 kubectl get pods
 ```
 
+A saída deve se parecer com isso:
+```
+No resources found in default namespace.
+```
+
 ## Mãos à obra!
+
+### Capítulo 0 - Pod
+
+Depois de obter acesso a um cluster Kubernetes em funcionamento, você pode implantar suas aplicações nele. A forma mais simples de fazer isso é criando **Pod**.
+
+Um **Pod** modela um "host lógico" específico da aplicação e pode conter diferentes contêineres de aplicação que estão relativamente acoplados. Por exemplo, um Pod pode incluir tanto o contêiner com a sua aplicação Node.js quanto um contêiner diferente que fornece os dados a serem publicados pelo servidor web Node.js. Os contêineres em um Pod compartilham um endereço IP e espaço de porta, estão sempre localizados e programados juntos e são executados em um contexto compartilhado no mesmo **Node**.
+
+> 🔜 Logo logo...
+>
+> Em breve você irá aprender mais sobre o conceito de nodes.
+
+Para fazer a implantação de um Pod, você precisará criar um arquivo `pod.yaml`, como no exemplo abaixo:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: meu-pod
+  namespace: <meu-namespace>
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80
+```
+
+> ⚠️ Atenção!
+>
+> Não se esqueça de trocar o valor de `<meu-namespace>`
+
+> 💡 Dica!
+> 
+> Para entender melhor o papel de cada campo, você pode executar o comando `kubectl explain pod.spec`.
+
+
+Em seguida, utilize o kubectl para criar no cluster o objeto que você acabou de descrever:
+
+```bash
+kubectl apply -f pod.yaml
+```
 
 ### Capítulo 1 - Deployment
 
-Depois de obter acesso a um cluster Kubernetes em funcionamento, você pode implantar suas aplicações nele. Para fazer isso, você irá criar um **Deployment** no Kubernetes. O **Deployment** instrui o Kubernetes sobre como criar e atualizar instâncias da sua aplicação. Uma vez que você tenha criado um **Deployment**, o _control plane_ do Kubernetes escalona as instâncias da aplicação incluídas nesse **Deployment** para serem executadas em _nodes_ individuais no cluster.
+Neste capítulo, você irá criar um **Deployment** no Kubernetes. O **Deployment** instrui o Kubernetes sobre como criar e atualizar instâncias da sua aplicação. Uma das funções do **Deployment** monitorar a saúde dos Pods e reiniciar ou substituir automaticamente os **Pods** que falham.
+
+Uma vez que você tenha criado um **Deployment**, o _control plane_ do Kubernetes escalona as instâncias da aplicação incluídas nesse **Deployment** para serem executadas em _nodes_ individuais no cluster.
 
 Você pode criar e gerenciar um **Deployment** usando a interface de linha de comando do Kubernetes, o **kubectl**.
 
@@ -96,9 +143,9 @@ kubectl get deployments
 
 Podemos ver que há 1 deployment executando uma única instância da sua aplicação. A aplicação está executando dentro de um contâiner no seu _Node_.
 
-> 👀 Fique sabendo
+> 👀 Observação...
 > 
-> Em ambiente de produção, tanto o Deployment quanto os outros componentes do cluster kubernetes são configurados diretamente nos arquivos .yaml. É realizado o comando `kubectl apply -f <component.yaml>` para criar/aplicar o componente de acordo com a especificação no .yaml
+> Você deve ter visto que, nesse capítulo, utilizamos uma abordagem diferente para criar os objetos no cluster, ao invés de `kubectl -f apply exemplo.yaml`, fizemos `kubectl create deployment exemplo --image=exemplo`. Essas duas formas são válidas, você pode ler mais sobre [aqui](https://stackoverflow.com/a/47389305).
 
 #### Exercícios
 
@@ -117,8 +164,6 @@ Quando você criou um **Deployment** no Capítulo 1, o Kubernetes criou um **Pod
 - Armazenamento compartilhado, como Volumes
 - Rede, como um endereço IP exclusivo no cluster
 - Informações sobre como executar cada contêiner, como a versão da imagem do contêiner ou portas específicas a serem usadas
-
-Um **Pod** modela um "host lógico" específico da aplicação e pode conter diferentes contêineres de aplicação que estão relativamente acoplados. Por exemplo, um Pod pode incluir tanto o contêiner com a sua aplicação Node.js quanto um contêiner diferente que fornece os dados a serem publicados pelo servidor web Node.js. Os contêineres em um Pod compartilham um endereço IP e espaço de porta, estão sempre localizados e programados juntos e são executados em um contexto compartilhado no mesmo **Node**.
 
 #### Nodes
 
