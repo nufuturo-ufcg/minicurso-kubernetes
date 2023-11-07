@@ -239,10 +239,10 @@ Nós já temos o nosso serviço rodando em nosso cluster kubernetes, no entanto,
 kubectl get services
 ```
 
-Existe apenas um **Service** chamado kubernetes, que é criado por padrão quando o cluster é iniciado. Para criar um novo **Service* e expor nossa aplicação ao tráfego externo, vamos utilizar o comando expose com o parâmetro "NodePort":
+Existe apenas um **Service** chamado kubernetes, que é criado por padrão quando o cluster é iniciado. Para criar um novo **Service* e expor nossa aplicação ao tráfego externo, vamos utilizar o comando expose com o parâmetro "LoadBalancer":
 
 ``` bash
-kubectl expose deployment/kubernetes-bootcamp --type="NodePort" --port 8080 
+kubectl expose deployment/kubernetes-bootcamp --type="LoadBalancer" --port 8080 
 ```
 
 Agora vamos rodar de novo o get services:
