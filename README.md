@@ -117,6 +117,18 @@ Em seguida, utilize o kubectl para criar no cluster o objeto que você acabou de
 kubectl apply -f pod.yaml
 ```
 
+Já foi visto que o Kubernetes é uma ferramenta que resolve problemas de falta de disponibilidade, permitindo o escalonamento automático de aplicações, garantindo que eles estejam sempre disponíveis, mesmo diante de variações na demanda. Para escalar nossa aplicação, é utilizado o action "scale", vamos tentar escalar o nosso pod, aumentando para 3 réplicas:
+
+```bash
+kubectl scale pod/meu-pod --replicas=3
+```
+
+Você verá uma mensagem de erro, pois não é possível escalar o _pod_ diretamente. Na verdade, não é sequer indicado manipular _pods_ diretamente, já que eles são efêmeros, vamos agora apagar o nosso _pod_ e fazer da maneira correta:
+
+```bash
+kubectl delete pod meu-pod
+```
+
 ### Capítulo 1 - Deployment
 
 Neste capítulo, você irá criar um **Deployment** no Kubernetes. O **Deployment** instrui o Kubernetes sobre como criar e atualizar instâncias da sua aplicação. Uma das funções do **Deployment** monitorar a saúde dos Pods e reiniciar ou substituir automaticamente os **Pods** que falham.
@@ -197,29 +209,29 @@ Agora que sabemos mais sobre os componentes do nosso cluster e a linha de comand
 
 ##### Checando a configuração da aplicação
 
-Após realizar o deploy da nossa aplicação, podemos utilizar uma série de comandos voltados para a visualização dos elementos de nosso cluster. Para verificar o que foi criado para a nossa aplicação, vamos utilizar o seguinte comando para ver os _Pods_ existentes:
+Após realizar o deploy da nossa aplicação, podemos utilizar uma série de comandos voltados para a visualização dos elementos de nosso cluster. Para verificar o que foi criado para a nossa aplicação, vamos utilizar o seguinte comando para ver os _pods_ existentes:
 
 ```bash
 kubectl get pods
 ```
 
-É possível ver que containers estão dentro de cada _Pod_ e que imagens foram usadas para em sua build utilizando o seguinte comando:
+É possível ver que containers estão dentro de cada _pod_ e que imagens foram usadas para em sua build utilizando o seguinte comando:
 
 ```bash
 kubectl describe pods
 ```
 
-Com a saída desse comando, vemos detalhes sobre o container do _Pod_, como o endereço de IP, as portas utilizadas e uma lista de eventos relacionados ao ciclo de vida do _Pod_. 
+Com a saída desse comando, vemos detalhes sobre o container do _pod_, como o endereço de IP, as portas utilizadas e uma lista de eventos relacionados ao ciclo de vida do _pod_. 
 
-Também é possível recuperar os logs dos containers do _Pod_, a partir do comando abaixo:
+Também é possível recuperar os logs dos containers do _pod_, a partir do comando abaixo:
 
 ```bash
 kubectl logs <pod-name>
 ```
 
-Nesse caso não foi necessário especificar o nome do container que queremos ver os logs, já que há apenas um container em seu interior, no entanto, em um cenário em que mais de um container é executado em cada _Pod_, é preciso especificar de qual container serão lidos os logs registrados.
+Nesse caso não foi necessário especificar o nome do container que queremos ver os logs, já que há apenas um container em seu interior, no entanto, em um cenário em que mais de um container é executado em cada _pod_, é preciso especificar de qual container serão lidos os logs registrados.
 
-Outra coisa que é possível fazer é executar comandos dentro do container enquanto o _Pod_ estiver em funcionamento, de forma semelhante ao Docker, para isso, usamos o comando exec, passando o nome do _Pod_ de parâmetro e o que queremos executar, como no exemplo abaixo:
+Outra coisa que é possível fazer é executar comandos dentro do container enquanto o _pod_ estiver em funcionamento, de forma semelhante ao Docker, para isso, usamos o comando exec, passando o nome do _pod_ de parâmetro e o que queremos executar, como no exemplo abaixo:
 
 ```bash
 kubectl exec -ti <pod-name> -- bash
@@ -233,7 +245,7 @@ curl http://localhost:8080
 
 ### Capítulo 3 - Expondo a aplicação
 
-Nós já temos o nosso serviço rodando em nosso cluster kubernetes, no entanto, ainda não é possível acessá-lo de fora do cluster, pois apesar de nossos _Pods_ possuírem um endereço de IP próprio, eles não são expostos para a internet, ou seja, nossa aplicação não está exposta. Para resolver isso, precisamos criar um **Service**, um componente do kubernetes que permite que os seus aplicativos recebam tráfego, atuando como um load balancer, recebendo o tráfego e passando para algum _Pod_ que esteja rodando a nossa aplicação. Vamos listas os **Services** atuais de nosso cluster:
+Nós já temos o nosso serviço rodando em nosso cluster kubernetes, no entanto, ainda não é possível acessá-lo de fora do cluster, pois apesar de nossos _pods_ possuírem um endereço de IP próprio, eles não são expostos para a internet, ou seja, nossa aplicação não está exposta. Para resolver isso, precisamos criar um **Service**, um componente do kubernetes que permite que os seus aplicativos recebam tráfego, atuando como um load balancer, recebendo o tráfego e passando para algum _pod_ que esteja rodando a nossa aplicação. Vamos listas os **Services** atuais de nosso cluster:
 
 ```bash
 kubectl get services
@@ -259,7 +271,7 @@ curl http://<node-ip>:<service-port>
 
 ### Capítulo 4 - Scaling
 
-Agora que já temos um serviço rodando e acessível através da internet, entraremos em um assunto que é uma das principais características do kubernetes: o scaling. Nós podemos escalar a nossa aplicação manualmente pelo **Deployment**, garantindo que novos _Pods_ sejam criados com os recursos disponíveis. Dessa forma, o kubernetes vai garantir que existam sempre a quantidade de réplicas definidas pelo usuário no arquivo de **Deployment**. Inicialmente, vamos ver a quantidade de pods rodando a nossa aplicação, novamente com o comando get pods, mas com uma flag a mais, que nos trás mais informações acerca de nossos pods:
+Anteriormente tentamos escalar o nosso _pod_ diretamente, mas vimos que não era possível, vamos tentar novamente agora, só que utilizando os componentes que foram criados até então. Agora que já temos um serviço rodando e acessível através da internet, nós podemos escalar a nossa aplicação manualmente pelo **Deployment**, garantindo que novos _pods_ sejam criados com os recursos disponíveis. Dessa forma, o kubernetes vai garantir que existam sempre a quantidade de réplicas definidas pelo usuário no arquivo de **Deployment**. Inicialmente, vamos ver a quantidade de pods rodando a nossa aplicação, novamente com o comando get pods, mas com uma flag a mais, que nos trás mais informações acerca de nossos pods:
 
 ```bash
 kubectl get pods -o wide
@@ -280,7 +292,7 @@ kubectl get pods -o wide
 
 ### Capítulo 5 - Update
 
-Um requisito não-funcional que quem utiliza o kubernetes busca cumprir é o de disponibilidade, já que os usuários esperam ter os seus aplicativos disponíveis o tempo todo e que os desenvolvedores implantar novas versões com frequência. Para permitir que novas versões sejam disponibilizadas sem a necessidade de haver tempos de inatividade, em que o serviço não está disponível, o kubernetes realiza atualizações contínuas, atualizando as instâncias dos _Pods_ aos poucos com novas instâncias possuindo uma nova versão da aplicação.
+Um requisito não-funcional que quem utiliza o kubernetes busca cumprir é o de disponibilidade, já que os usuários esperam ter os seus aplicativos disponíveis o tempo todo e que os desenvolvedores implantar novas versões com frequência. Para permitir que novas versões sejam disponibilizadas sem a necessidade de haver tempos de inatividade, em que o serviço não está disponível, o kubernetes realiza atualizações contínuas, atualizando as instâncias dos _pods_ aos poucos com novas instâncias possuindo uma nova versão da aplicação.
 
 Vamos atualizar a imagem da nossa aplicação para uma segunda versão, utilizando o comando set image:
 
@@ -288,7 +300,7 @@ Vamos atualizar a imagem da nossa aplicação para uma segunda versão, utilizan
 kubectl set image deployments/kubernetes-bootcamp kubernetes-bootcamp=jocatalin/kubernetes-bootcamp:v2
 ```
 
-Ao executar o comando, o **Deployment** foi notificado para utilizar uma imagem diferente da sua aplicação e iniciou uma atualização contínua. O status tanto dos novos _Pods_ quanto dos antigos pode ser visto realizando um get pods:
+Ao executar o comando, o **Deployment** foi notificado para utilizar uma imagem diferente da sua aplicação e iniciou uma atualização contínua. O status tanto dos novos _pods_ quanto dos antigos pode ser visto realizando um get pods:
 
 ```bash
 kubectl get pods
@@ -300,4 +312,4 @@ E, para ter certeza que a versão da imagem foi atualizada, podemos utilizar um 
 kubectl describe pods
 ```
 
-Podemos ver que a imagem foi atualizada, e os próximos _Pods_ criados a partir desse **Deployment** terão todos essa nova imagem.
+Podemos ver que a imagem foi atualizada, e os próximos _pods_ criados a partir desse **Deployment** terão todos essa nova imagem.
