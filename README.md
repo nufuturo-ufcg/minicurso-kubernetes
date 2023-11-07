@@ -215,7 +215,7 @@ Após realizar o deploy da nossa aplicação, podemos utilizar uma série de com
 kubectl get pods
 ```
 
-É possível ver que containers estão dentro de cada _pod_ e que imagens foram usadas para em sua build utilizando o seguinte comando:
+É possível ver que containers estão dentro de cada _pod_ e que imagens foram usadas em sua build utilizando o seguinte comando:
 
 ```bash
 kubectl describe pods
