@@ -269,6 +269,10 @@ Nesse momento, nós temos um novo **Service** chamado kubernetes-bootcamp, e pod
 curl http://<node-ip>:<service-port>
 ```
 
+> 👀 Observação...
+> 
+> Subir um Service do tipo "LoadBalancer" pode levar alguns minutos, caso não esteja respondendo, aguarde um tempo e tente novamente!
+
 ### Capítulo 4 - Scaling
 
 Anteriormente tentamos escalar o nosso _pod_ diretamente, mas vimos que não era possível, vamos tentar novamente agora, só que utilizando os componentes que foram criados até então. Agora que já temos um serviço rodando e acessível através da internet, nós podemos escalar a nossa aplicação manualmente pelo **Deployment**, garantindo que novos _pods_ sejam criados com os recursos disponíveis. Dessa forma, o kubernetes vai garantir que existam sempre a quantidade de réplicas definidas pelo usuário no arquivo de **Deployment**. Inicialmente, vamos ver a quantidade de pods rodando a nossa aplicação, novamente com o comando get pods, mas com uma flag a mais, que nos trás mais informações acerca de nossos pods:
